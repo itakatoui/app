@@ -1,15 +1,23 @@
 import streamlit as st
+from scipy.optimize import linprog
 
-st.set_page_config(page_title="新年の挨拶カード", page_icon=":tada:", layout="wide")
+st.title("Linear Programming with Streamlit")
 
-st.title("新年の挨拶カードジェネレータ")
+# Define the objective function
+c = [4, 5]
+obj_fun = linprog(c, bounds=(0, None))
 
-name = st.text_input("あなたの名前を入力してください: ")
-message = st.text_area("メッセージを入力してください: ")
+st.write("Objective function: ", obj_fun)
 
-if st.button("カードを生成"):
-    st.success(name + "さん、謹賀新年!")
-    st.markdown(message)
-    st.markdown("下のボタンをクリックしてカードをダウンロードできます")
-    if st.button("カードをダウンロード"):
-        pass  # Add code here to download the card as an image.
+# Define the constraints
+A = [[3, 2], [1, 2]]
+b = [6, 4]
+
+# Solve the linear program
+x0_bounds = (0, None)
+x1_bounds = (0, None)
+
+res = linprog(c, A_ub=A, b_ub=b, bounds=[x0_bounds, x1_bounds], method='simplex')
+
+st.write("Solution: ", res)
+
